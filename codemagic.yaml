@@ -3,7 +3,7 @@ workflows:
     name: iOS WebView App (Unsigned Build)
     max_build_duration: 60
     environment:
-      xcode: 15.0
+      xcode: latest
       vars:
         XCODE_PROJECT: "WebViewApp/WebViewApp.xcodeproj"
         XCODE_SCHEME: "WebViewApp"
