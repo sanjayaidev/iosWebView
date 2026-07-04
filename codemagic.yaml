@@ -17,6 +17,8 @@ workflows:
       ios_signing:
         certificates:
           - $CERTIFICATE_PRIVATE_KEY
+        provisioning_profiles:
+          - $IOS_PROVISIONING_PROFILE
     triggering:
       events:
         - push
