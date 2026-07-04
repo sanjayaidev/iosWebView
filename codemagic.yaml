@@ -1,18 +1,12 @@
 workflows:
   ios-workflow:
-    name: iOS WebView App
+    name: iOS WebView App (Unsigned Build)
     max_build_duration: 60
     environment:
+      xcode: 15.0
       vars:
-        XCODE_WORKSPACE: "WebViewApp.xcworkspace"
+        XCODE_PROJECT: "WebViewApp/WebViewApp.xcodeproj"
         XCODE_SCHEME: "WebViewApp"
-        BUNDLE_ID: "com.sanjay.webviewapp"  # Change this to something unique!
-        XCODE_VERSION: "15.0"
-        APPLE_ID: "$APPLE_ID"  # Your Apple ID email
-        APPLE_ID_PASSWORD: "$APPLE_ID_PASSWORD"  # Your Apple ID password (or app-specific password)
-      ios_signing:
-        distribution_type: development
-        bundle_identifier: $BUNDLE_ID
     triggering:
       events:
         - push
@@ -21,24 +15,20 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Install dependencies
+      - name: Build unsigned .app for device
         script: |
-          if [ -f "ios/Podfile" ]; then
-            cd ios
-            pod install
-            cd ..
-          fi
-      - name: Set up automatic provisioning
+          xcodebuild -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -derivedDataPath build \
+            clean build
+      - name: Package as unsigned IPA
         script: |
-          xcode-project use-profiles \
-            --type development \
-            --bundle-id "$BUNDLE_ID" \
-            --apple-id "$APPLE_ID" \
-            --apple-id-password "$APPLE_ID_PASSWORD"
-      - name: Build IPA
-        script: |
-          xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME"
+          mkdir -p build/Payload
+          cp -r build/Build/Products/Release-iphoneos/WebViewApp.app build/Payload/
+          cd build && zip -r ../unsigned-WebViewApp.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - unsigned-WebViewApp.ipa
