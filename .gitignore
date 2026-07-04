@@ -1,0 +1,35 @@
+```
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+*.pbxuser
+*.mode1v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
+# Build
+build/
+DerivedData/
+
+# Swift
+*.swiftmodule
+*.swiftdoc
+*.swiftdip
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Dependencies
+node_modules/
+Pods/
+Carthage/
+```
