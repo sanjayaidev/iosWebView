@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebView Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:active {
+            opacity: 0.7;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 20px;
+        }
+        .info-box {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #007AFF;
+        }
+        .info-box code {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>WKWebView Demo</h1>
+    <p>Interact with native iOS code from JavaScript</p>
+    
+    <button onclick="callNative()">Call Native Function</button>
+    <button onclick="evaluateJS()">Get Device Info</button>
+    
+    <div id="result">Result will appear here</div>
+    
+    <div class="info-box">
+        <h3>About This Demo</h3>
+        <p>This HTML page demonstrates bidirectional communication between JavaScript and native iOS code:</p>
+        <ul>
+            <li><strong>WKScriptMessageHandler:</strong> Allows JavaScript to send messages to native code using <code>window.webkit.messageHandlers</code></li>
+            <li><strong>evaluateJavaScript():</strong> Enables native code to execute JavaScript and update the UI</li>
+        </ul>
+        <p><strong>Note:</strong> When running in the iOS app, the buttons will communicate with native Swift code. In a regular browser, they'll show simulated responses.</p>
+    </div>
+    
+    <script>
+        function callNative() {
+            const timestamp = new Date().toISOString();
+            
+            // Check if running in WKWebView
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeHandler) {
+                window.webkit.messageHandlers.nativeHandler.postMessage({
+                    action: 'buttonClicked',
+                    timestamp: timestamp
+                });
+            } else {
+                // Simulated response for browser testing
+                document.getElementById('result').innerText = 'Simulated: Button clicked at ' + timestamp + '\n(Note: Run in iOS app for native communication)';
+            }
+        }
+        
+        function evaluateJS() {
+            // Check if running in WKWebView
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.nativeHandler) {
+                window.webkit.messageHandlers.nativeHandler.postMessage({
+                    action: 'getDeviceInfo'
+                });
+            } else {
+                // Simulated response for browser testing
+                const deviceInfo = 'Device: Browser Test\nSystem: ' + navigator.platform;
+                document.getElementById('result').innerText = deviceInfo + '\n(Note: Run in iOS app for real device info)';
+            }
+        }
+        
+        function updateResult(message) {
+            document.getElementById('result').innerText = message;
+        }
+    </script>
+</body>
+</html>
