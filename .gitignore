@@ -1,6 +1,4 @@
-```yaml
-# Configuration file for Codemagic CI/CD
-# No build artifacts or dependencies detected in changes
-# Only preserving any existing relevant ignores
-
+```
+# Configuration and workflow files
+.codemagic/
 ```
