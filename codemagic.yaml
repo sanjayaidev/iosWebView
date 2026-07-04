@@ -15,8 +15,6 @@ workflows:
         BUNDLE_ID: "com.example.webviewapp"
         XCODE_VERSION: latest
       ios_signing:
-        provisioning_profiles:
-          - com_example_webviewapp
         certificates:
           - $CERTIFICATE_PRIVATE_KEY
     triggering:
