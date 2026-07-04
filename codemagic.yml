@@ -1,0 +1,31 @@
+workflows:
+  ios-workflow:
+    name: iOS WebView App (Simulator Build)
+    max_build_duration: 60
+    environment:
+      xcode: latest
+      vars:
+        XCODE_PROJECT: "WebViewApp/WebViewApp.xcodeproj"
+        XCODE_SCHEME: "WebViewApp"
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+    scripts:
+      - name: Build for iOS Simulator
+        script: |
+          xcodebuild -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath build \
+            clean build
+      - name: Zip the .app for Appetize
+        script: |
+          cd build/Build/Products/Debug-iphonesimulator
+          zip -r WebViewApp-simulator.zip WebViewApp.app
+    artifacts:
+      - build/Build/Products/Debug-iphonesimulator/WebViewApp-simulator.zip
