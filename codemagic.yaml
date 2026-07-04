@@ -6,7 +6,7 @@ workflows:
       vars:
         XCODE_WORKSPACE: "WebViewApp.xcworkspace"
         XCODE_SCHEME: "WebViewApp"
-        BUNDLE_ID: "com.yourcompany.webviewapp"  # Change this to something unique!
+        BUNDLE_ID: "com.sanjay.webviewapp"  # Change this to something unique!
         XCODE_VERSION: "15.0"
         APPLE_ID: "$APPLE_ID"  # Your Apple ID email
         APPLE_ID_PASSWORD: "$APPLE_ID_PASSWORD"  # Your Apple ID password (or app-specific password)
