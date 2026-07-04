@@ -6,9 +6,10 @@ workflows:
       vars:
         XCODE_WORKSPACE: "WebViewApp.xcworkspace"
         XCODE_SCHEME: "WebViewApp"
-        BUNDLE_ID: "com.yourcompany.webviewapp"
+        BUNDLE_ID: "com.yourcompany.webviewapp"  # Change this to something unique!
         XCODE_VERSION: "15.0"
-      # Use automatic signing - no certificates needed!
+        APPLE_ID: "$APPLE_ID"  # Your Apple ID email
+        APPLE_ID_PASSWORD: "$APPLE_ID_PASSWORD"  # Your Apple ID password (or app-specific password)
       ios_signing:
         distribution_type: development
         bundle_identifier: $BUNDLE_ID
@@ -27,11 +28,13 @@ workflows:
             pod install
             cd ..
           fi
-      - name: Set up automatic signing
+      - name: Set up automatic provisioning
         script: |
           xcode-project use-profiles \
             --type development \
-            --bundle-id "$BUNDLE_ID"
+            --bundle-id "$BUNDLE_ID" \
+            --apple-id "$APPLE_ID" \
+            --apple-id-password "$APPLE_ID_PASSWORD"
       - name: Build IPA
         script: |
           xcode-project build-ipa \
